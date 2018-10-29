@@ -12,7 +12,7 @@ class AABB {
 	public static function createEmpty()
 		return new AABB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
-	@:extern inline function new(
+	inline function new(
 		minX: Float, minY: Float, minZ: Float,
 		maxX: Float, maxY: Float, maxZ: Float
 	) {
