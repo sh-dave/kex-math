@@ -12,4 +12,7 @@ class MathApi {
 	// map x from [a; b] to [c; d]
 	public static inline function linearRemap( x: Float, a: Float, b: Float, c: Float, d: Float ) : Float
 		return lerp(unlerp(x, a, b), c, d);
+
+	public static inline function sign( f: Float ) : Float
+		return f < 0 ? -1 : f > 0 ? 1 : 0;
 }
