@@ -15,4 +15,13 @@ class MathApi {
 
 	public static inline function sign( f: Float ) : Float
 		return f < 0 ? -1 : f > 0 ? 1 : 0;
+
+   public static inline function euclidianDistanceSquared( x1, y1, x2, y2 ) : Float {
+        var dx = x1 - x2;
+        var dy = y1 - y2;
+        return dx * dx + dy * dy;
+    }
+
+    public static inline function euclidianDistance( x1, y1, x2, y2 )
+        return Math.sqrt(euclidianDistanceSquared(x1, y1, x2, y2));
 }
