@@ -4,10 +4,9 @@ import kha.FastFloat;
 import kha.math.FastVector2;
 import kha.math.FastVector3;
 import kha.math.Random;
-import Math.*;
 
 class RandomApi {
-	@:external public static inline function int( from: Int, to: Int ) : Int
+	public static inline function int( from: Int, to: Int ) : Int
 		return Random.getIn(from, to);
 
 	public static function shuffle<T>( a: Array<T> ) : Array<T> {
@@ -42,7 +41,7 @@ class RandomApi {
 	// insideSphere: 1.58715910602148
 	// insideSphere discard: 1.49803103174638
 
-	@:extern public static inline function insideUnitCircle() : FastVector2
+	public static inline function insideUnitCircle() : FastVector2
 		return insideCircle(0.5);
 
 	// @:extern public static inline function insideCircle( radius: Float ) : FastVector2 {
@@ -53,7 +52,7 @@ class RandomApi {
 	// 	return new FastVector2(x, y);
 	// }
 
-	@:extern public static inline function insideCircle( radius: Float ) : FastVector2 {
+	public static inline function insideCircle( radius: Float ) : FastVector2 {
 		var x: FastFloat;
 		var y: FastFloat;
 
@@ -65,7 +64,7 @@ class RandomApi {
 		return new FastVector2(x, y);
 	}
 
-	@:extern public static inline function insideUnitSphere() : FastVector3
+	public static inline function insideUnitSphere() : FastVector3
 		return insideSphere(0.5);
 
 	// @:extern public static inline function insideSphere( radius: Float ) : FastVector3 {
@@ -80,7 +79,7 @@ class RandomApi {
 	// 	return new FastVector3(x, y, z);
 	// }
 
-	@:extern public static inline function insideSphere( radius: Float ) : FastVector3 {
+	public static inline function insideSphere( radius: Float ) : FastVector3 {
 		var x: FastFloat;
 		var y: FastFloat;
 		var z: FastFloat;
