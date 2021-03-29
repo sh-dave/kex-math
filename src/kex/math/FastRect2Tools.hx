@@ -1,8 +1,5 @@
 package kex.math;
 
-import kha.FastFloat;
-import kha.math.FastVector2;
-
 using kex.math.FastVector2Ext;
 
 enum MarchingAntsMode {

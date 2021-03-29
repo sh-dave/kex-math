@@ -1,7 +1,5 @@
 package kex.math;
 
-import kha.FastFloat;
-
 class FastRect2 {
     @:isVar public var x(get, set): FastFloat;
     @:isVar public var y(get, set): FastFloat;

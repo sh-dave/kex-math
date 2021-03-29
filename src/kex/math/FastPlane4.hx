@@ -1,6 +1,5 @@
 package kex.math;
 
-import kha.FastFloat;
 import kha.math.FastVector4;
 
 using kex.math.KhaFastVector4Ext;

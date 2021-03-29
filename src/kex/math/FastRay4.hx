@@ -1,34 +1,95 @@
 package kex.math;
 
-import kha.FastFloat;
-import kha.math.FastVector4;
-
 @:structInit
 class FastRay4 {
-    public var ox: FastFloat = 0.0;
-    public var oy: FastFloat = 0.0;
-    public var oz: FastFloat = 0.0;
-    public var ow: FastFloat = 1.0;
+    public var originx: FastFloat = 0.0;
+    public var originy: FastFloat = 0.0;
+    public var originz: FastFloat = 0.0;
+    public var originw: FastFloat = 1.0;
 
-    public var dx: FastFloat = 0.0;
-    public var dy: FastFloat = 0.0;
-    public var dz: FastFloat = 0.0;
-    public var dw: FastFloat = 1.0;
+    public var directionx: FastFloat = 0.0;
+    public var directiony: FastFloat = 0.0;
+    public var directionz: FastFloat = 0.0;
+    public var directionw: FastFloat = 1.0;
 }
 
-class FastRay4Math {
-    public static inline function at( ray: FastRay4, t: FastFloat ) : FastVector4 {
-        return new FastVector4(ray.dx, ray.dy, ray.dz, ray.dw)
-            .mult(t)
-            .add(new FastVector4(ray.ox, ray.oy, ray.oz, ray.ow));
-    }
+inline function ray_at( ray: FastRay4, t: FastFloat ) : FastVector4 {
+	final dir = fv4(ray.directionx, ray.directiony, ray.directionz, ray.directionw);
+	final origin = fv4(ray.originx, ray.originy, ray.originz, ray.originw);
+	return dir.mult(t).add(origin);
+}
 
-	// public function distanceToPoint(point:Vec4):Float
-    // public function intersectsSphere(sphereCenter:Vec4, sphereRadius:Float):Bool
-    // public function intersectsPlane(plane:Plane):Bool
-    // public function distanceToPlane(plane:Plane):Float
-    // public function intersectPlane(plane:Plane):Vec4
-    // public function intersectsBox(center:Vec4, size:Vec4):Bool
-    // public function intersectBox(center:Vec4, size:Vec4):Vec4
-    // public function intersectTriangle(a:Vec4, b:Vec4, c:Vec4, backfaceCulling:Bool):Vec4
+inline function ray_intersect_box_at( ray: FastRay4, box: FastBox3 ) : Null<FastVector4> {
+	var tmin: FastFloat;
+	var tmax: FastFloat;
+	var tymin: FastFloat;
+	var tymax: FastFloat;
+	var tzmin: FastFloat;
+	var tzmax: FastFloat;
+	final invdirx: FastFloat = 1 / ray.directionx;
+	final invdiry: FastFloat = 1 / ray.directiony;
+	final invdirz: FastFloat = 1 / ray.directionz;
+
+	if (invdirx >= 0) {
+		tmin = (box.minx - ray.originx) * invdirx;
+		tmax = (box.maxx - ray.originx) * invdirx;
+	} else {
+		tmin = (box.maxx - ray.originx ) * invdirx;
+		tmax = (box.minx - ray.originx ) * invdirx;
+	}
+
+	if (invdiry >= 0) {
+		tymin = (box.miny - ray.originy) * invdiry;
+		tymax = (box.maxy - ray.originy) * invdiry;
+	} else {
+		tymin = (box.maxy - ray.originy) * invdiry;
+		tymax = (box.miny - ray.originy) * invdiry;
+	}
+
+	if ((tmin > tymax) || (tymin > tmax)) {
+		return null;
+	}
+
+	// These lines also handle the case where tmin or tmax is NaN
+	// (result of 0 * Infinity). x !== x returns true if x is NaN
+
+	if (tymin > tmin || tmin != tmin) {
+		tmin = tymin;
+	}
+
+	if (tymax < tmax || tmax != tmax) {
+		tmax = tymax;
+	}
+
+	if (invdirz >= 0) {
+		tzmin = (box.minz - ray.originz) * invdirz;
+		tzmax = (box.maxz - ray.originz) * invdirz;
+	} else {
+		tzmin = (box.maxz - ray.originz) * invdirz;
+		tzmax = (box.minz - ray.originz) * invdirz;
+	}
+
+	if ((tmin > tzmax) || (tzmin > tmax)) {
+		return null;
+	}
+
+	if (tzmin > tmin || tmin != tmin) {
+		tmin = tzmin;
+	}
+
+	if (tzmax < tmax || tmax != tmax) {
+		tmax = tzmax;
+	}
+
+	//return point closest to the ray (positive side)
+
+	if (tmax < 0) {
+		return null;
+	}
+
+	return ray_at(ray, tmin >= 0 ? tmin : tmax);
+}
+
+inline function ray_intersects_box( ray: FastRay4, box: FastBox3 ) : Bool {
+	return ray_intersect_box_at(ray, box) != null;
 }
