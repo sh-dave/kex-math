@@ -1,3 +1,5 @@
+package kex.math;
+
 inline function fv2( x: FastFloat, y: FastFloat ) : FastVector2 {
     return new FastVector2(x, y);
 }
